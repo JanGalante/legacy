@@ -1,0 +1,35 @@
+﻿using System;
+
+namespace BusinessLayer.Enumerators
+{
+    /// <summary>
+    /// Summary description for Enumerators 
+    /// (EnumeratedConstants)
+    /// </summary>
+    public static class EnumConstants
+    {
+        /// <summary>
+        /// Enum för typ av "turnering".
+        /// </summary>
+        public enum GameType
+        {
+            Undefined,
+            League,
+            WordChampionship,
+            EuropeanChampionship
+        }
+
+        //public enum LeagueType
+        //{ 
+        
+        //}
+
+        public enum WinningTeam
+        { 
+            Undefined,
+            Hometeam,
+            Draw,
+            Awayteam
+        }
+    } 
+}

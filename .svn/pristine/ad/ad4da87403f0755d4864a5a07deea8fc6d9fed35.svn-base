@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Services;
+using System.Web.Services.Protocols;
+using System.Xml.Linq;
+using System.Xml;
+using BusinessLayer;
+
+namespace janlundholm.eu.HttpHandlers
+{
+	/// <summary>
+	/// Summary description for $codebehindclassname$
+	/// </summary>
+	[WebService(Namespace = "http://tempuri.org/")]
+	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+	public class Wc2010 : IHttpHandler
+	{
+		private HttpContext Context { set; get; }
+
+		public void ProcessRequest(HttpContext context)
+		{
+			//context.Response.ContentType = "text/plain";
+			//context.Response.Write("Hello World");
+
+			this.Context = context;
+
+			switch (this.Context.Request["action"])
+			{
+				case "saveResult":
+					this.SaveResult();
+					break;
+				default:
+					break;
+			}
+		}
+
+		public bool IsReusable
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		public void SaveResult()
+		{
+			//http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=5&awaygoal=4
+			string group = this.Context.Request["group"];
+			string homeTeam = this.Context.Request["hometeam"];
+			string awayTeam = this.Context.Request["awayteam"];
+
+			int homeGoal = int.Parse(this.Context.Request["awaygoal"]);
+			int awayGoal = int.Parse(this.Context.Request["awaygoal"]);
+
+			XmlDocument doc = new XmlDocument();
+			doc.Load(System.Web.HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+			
+			doc.SelectSingleNode("/tournement/group[@name='" + group + "']/game[@homeTeam='" + homeTeam + "'][@awayTeam='" + awayTeam + "']/result").Attributes["fulltime"]
+				.InnerText = string.Format("{0}-{1}", homeGoal.ToString(), awayGoal.ToString());
+
+			//Hämtar upp resultat från XML
+			//wcResultFullTime.Parse(doc.SelectSingleNode("/tournement/group[@name='" + group + "']/game[@homeTeam='" + homeTeam + "'][@awayTeam='" + 
+			//    awayTeam + "']/result").Attributes["fulltime"].InnerText);
+			//string[] xmlResult = doc.SelectSingleNode("/tournement/group[@name='" + group + "']/game[@homeTeam='" + homeTeam + "'][@awayTeam='" +
+			//    awayTeam + "']/result").Attributes["fulltime"].InnerText.Split('-');
+			//xmlResult[0];
+
+			
+
+
+			//XDocument doc = XDocument.Load(HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+			//var games = from game in doc.Descendants("group")
+			//            where game.Attribute("homeTeam") == homeTeam //|| game.Attribute("homeTeam") == null
+			//            select new
+			//            {
+			//                homeTeam = game.Attribute("homeTeam"),
+			//                homegoals = game.Element("homeTeam").Attribute("fulltime")
+
+			//            };
+
+			//if (int.TryParse(this.Context.Request["homegoal"], out homeGoal))
+			//{
+			//    // Create an element with no content
+			//    XElement root = new XElement("Root");
+
+			//    // Add some name/value pairs.
+			//    root.SetElementValue("Ele1", 1);
+			//}
+
+
+
+
+			//Sparar Xml
+			doc.Save(System.Web.HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+		}
+	}
+}

@@ -1,0 +1,20 @@
+﻿$(document).ready(function(){
+    
+    //var homeTeam = $("");
+    
+    
+    $("div.game .result-hometeam").each(function (){
+		//alert($(this).text());
+		$("div.game .editable").editable("http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=2&awaygoal=0", { 
+			method : "PUT",
+			id   : 'homeGoal',
+			name : 'newvalue'
+		});
+    });
+    
+//    $("div.game .editable").editable("http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=2&awaygoal=0", { 
+//		method : "PUT",
+//		id   : 'homeGoal',
+//        name : 'newvalue'
+//	});
+});

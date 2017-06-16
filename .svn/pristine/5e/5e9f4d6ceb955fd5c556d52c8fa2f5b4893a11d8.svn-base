@@ -1,0 +1,192 @@
+﻿using System;
+using System.Collections;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Services;
+using System.Web.Services.Protocols;
+using System.Xml.Linq;
+using System.Xml;
+using BusinessLayer;
+using System.Text;
+
+namespace janlundholm.eu.HttpHandlers
+{
+	/// <summary>
+	/// Summary description for $codebehindclassname$
+	/// </summary>
+	[WebService(Namespace = "http://tempuri.org/")]
+	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+	public class Wc2010 : IHttpHandler
+	{
+		private HttpContext Context { set; get; }
+
+		public void ProcessRequest(HttpContext context)
+		{
+			//context.Response.ContentType = "text/plain";
+			//context.Response.Write("Hello World");
+
+			this.Context = context;
+
+			//this.Context.Response.Write("jaaaaaaaa");
+			//this.Context.Response.End();
+
+			switch (this.Context.Request["action"])
+			{
+				case "saveResult":
+					this.SaveResult();
+					break;
+				case "getGroup":
+					this.GetGroup();
+					break;
+				case "saveFinals":
+					this.SaveFinals();
+					break;
+				default:
+					break;
+			}
+		}
+
+		public bool IsReusable
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Sparar enskilda resultat i gruppspelet
+		/// </summary>
+		public void SaveResult()
+		{
+			////http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=5&awaygoal=4
+			//string group = this.Context.Request["group"];
+			//string homeTeam = this.Context.Request["hometeam"];
+			//string awayTeam = this.Context.Request["awayteam"];
+
+			//int homeGoal = int.Parse(this.Context.Request["homegoal"]);
+			//int awayGoal = int.Parse(this.Context.Request["awaygoal"]);
+
+			//XmlDocument doc = new XmlDocument();
+			//doc.Load(System.Web.HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+			
+			//doc.SelectSingleNode("/tournement/group[@name='" + group + "']/game[@homeTeam='" + homeTeam + "'][@awayTeam='" + awayTeam + "']/result").Attributes["fulltime"]
+			//    .InnerText = string.Format("{0}-{1}", homeGoal.ToString(), awayGoal.ToString());
+
+
+			string id = this.Context.Request["gameid"];
+			string result = this.Context.Request["result"];
+			string[] results = result.Trim().Split(new char[]{'-'});
+			int homeGoal;
+			int awayGoal; 
+
+			//Kontrollerar att två resultat angivits och att båda dessa är numeriska
+			if (results == null || results.Length != 2 || !int.TryParse(results[0], out homeGoal) || !int.TryParse(results[1], out awayGoal))
+			{
+				//Om inte avsluta
+				return;
+			}
+
+			XmlDocument doc = new XmlDocument();
+			doc.Load(System.Web.HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+
+			doc.SelectSingleNode("//game[@id='" + id + "']/result").Attributes["fulltime"]
+				.InnerText = string.Format("{0}-{1}", homeGoal.ToString(), awayGoal.ToString());
+
+
+
+
+			//Hämtar upp resultat från XML
+			//wcResultFullTime.Parse(doc.SelectSingleNode("/tournement/group[@name='" + group + "']/game[@homeTeam='" + homeTeam + "'][@awayTeam='" + 
+			//    awayTeam + "']/result").Attributes["fulltime"].InnerText);
+			//string[] xmlResult = doc.SelectSingleNode("/tournement/group[@name='" + group + "']/game[@homeTeam='" + homeTeam + "'][@awayTeam='" +
+			//    awayTeam + "']/result").Attributes["fulltime"].InnerText.Split('-');
+			//xmlResult[0];
+
+			
+
+
+			//XDocument doc = XDocument.Load(HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+			//var games = from game in doc.Descendants("group")
+			//            where game.Attribute("homeTeam") == homeTeam //|| game.Attribute("homeTeam") == null
+			//            select new
+			//            {
+			//                homeTeam = game.Attribute("homeTeam"),
+			//                homegoals = game.Element("homeTeam").Attribute("fulltime")
+
+			//            };
+
+			//if (int.TryParse(this.Context.Request["homegoal"], out homeGoal))
+			//{
+			//    // Create an element with no content
+			//    XElement root = new XElement("Root");
+
+			//    // Add some name/value pairs.
+			//    root.SetElementValue("Ele1", 1);
+			//}
+
+
+
+
+			//Sparar Xml
+			doc.Save(System.Web.HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+
+			string response = string.Format("{0} - {1}", homeGoal.ToString(), awayGoal.ToString());
+			this.Context.Response.Write(response);
+			this.Context.Response.End();
+		}
+
+		public void GetGroup()
+		{
+			string group = this.Context.Request["group"].ToUpper();
+			StringBuilder sb = new StringBuilder();
+
+
+			XmlDocument doc = new XmlDocument();
+			doc.Load(System.Web.HttpContext.Current.Server.MapPath("~/Documents/WorldCupNewUser.xml"));
+
+			wcGameCollection games = wcGameReposetory.wcGetGameCollection(null, doc, "/tournement/group[@name='" + group + "']/game");
+
+			//sb.AppendFormat("{");
+			sb.Append("[");
+
+
+			foreach (wcTeam team in games.Teams)
+			{
+				sb.Append("{");
+				sb.AppendFormat("{0}name{0}: {0}{1}{0},", "\"", team.Name);
+				sb.AppendFormat("{0}gamesplayed{0}: {0}{1}{0},", "\"", team.GamesPlayed);
+				sb.AppendFormat("{0}gameswon{0}: {0}{1}{0},", "\"", team.GamesWon.ToString());
+				sb.AppendFormat("{0}gamesdraw{0}: {0}{1}{0},", "\"", team.GamesDraw.ToString());
+				sb.AppendFormat("{0}gameslost{0}: {0}{1}{0},", "\"", team.GamesLost.ToString());
+				sb.AppendFormat("{0}goalsmade{0}: {0}{1}{0},", "\"", team.GoalsMade.ToString());
+				sb.AppendFormat("{0}goalsbackward{0}: {0}{1}{0},", "\"", team.GoalsBackward.ToString());
+				sb.AppendFormat("{0}goaldifference{0}: {0}{1}{0},", "\"", team.GoalDifference.ToString());
+				sb.AppendFormat("{0}points{0}: {0}{1}{0}", "\"", team.Points.ToString());
+				sb.Append("},");
+			}
+			sb.Replace(",", string.Empty, sb.Length - 1, 1);
+
+			sb.Append("]");
+
+
+			this.Context.Response.Write(sb.ToString());
+			this.Context.Response.End();
+		}
+
+		public void SaveFinals()
+		{
+			//GoogleSearchResults g1 = new GoogleSearchResults();
+			//const string json = @"{""responseData"": {""results"":[{""GsearchResultClass"":""GwebSearch"",""unescapedUrl"":""http://www.cheese.com/"",""url"":""http://www.cheese.com/"",""visibleUrl"":""www.cheese.com"",""cacheUrl"":""http://www.google.com/search?q\u003dcache:bkg1gwNt8u4J:www.cheese.com"",""title"":""\u003cb\u003eCHEESE\u003c/b\u003e.COM - All about \u003cb\u003echeese\u003c/b\u003e!."",""titleNoFormatting"":""CHEESE.COM - All about cheese!."",""content"":""\u003cb\u003eCheese\u003c/b\u003e - everything you want to know about it. Search \u003cb\u003echeese\u003c/b\u003e by name, by types   of milk, by textures and by countries.""},{""GsearchResultClass"":""GwebSearch"",""unescapedUrl"":""http://en.wikipedia.org/wiki/Cheese"",""url"":""http://en.wikipedia.org/wiki/Cheese"",""visibleUrl"":""en.wikipedia.org"",""cacheUrl"":""http://www.google.com/search?q\u003dcache:n9icdgMlCXIJ:en.wikipedia.org"",""title"":""\u003cb\u003eCheese\u003c/b\u003e - Wikipedia, the free encyclopedia"",""titleNoFormatting"":""Cheese - Wikipedia, the free encyclopedia"",""content"":""\u003cb\u003eCheese\u003c/b\u003e is a food consisting of proteins and fat from milk, usually the milk of   cows, buffalo, goats, or sheep. It is produced by coagulation of the milk \u003cb\u003e...\u003c/b\u003e""},{""GsearchResultClass"":""GwebSearch"",""unescapedUrl"":""http://www.ilovecheese.com/"",""url"":""http://www.ilovecheese.com/"",""visibleUrl"":""www.ilovecheese.com"",""cacheUrl"":""http://www.google.com/search?q\u003dcache:GBhRR8ytMhQJ:www.ilovecheese.com"",""title"":""I Love \u003cb\u003eCheese\u003c/b\u003e!, Homepage"",""titleNoFormatting"":""I Love Cheese!, Homepage"",""content"":""The American Dairy Association\u0026#39;s official site includes recipes and information   on nutrition and storage of \u003cb\u003echeese\u003c/b\u003e.""},{""GsearchResultClass"":""GwebSearch"",""unescapedUrl"":""http://www.gnome.org/projects/cheese/"",""url"":""http://www.gnome.org/projects/cheese/"",""visibleUrl"":""www.gnome.org"",""cacheUrl"":""http://www.google.com/search?q\u003dcache:jvfWnVcSFeQJ:www.gnome.org"",""title"":""\u003cb\u003eCheese\u003c/b\u003e"",""titleNoFormatting"":""Cheese"",""content"":""\u003cb\u003eCheese\u003c/b\u003e uses your webcam to take photos and videos, applies fancy special effects   and lets you share the fun with others. It was written as part of Google\u0026#39;s \u003cb\u003e...\u003c/b\u003e""}],""cursor"":{""pages"":[{""start"":""0"",""label"":1},{""start"":""4"",""label"":2},{""start"":""8"",""label"":3},{""start"":""12"",""label"":4},{""start"":""16"",""label"":5},{""start"":""20"",""label"":6},{""start"":""24"",""label"":7},{""start"":""28"",""label"":8}],""estimatedResultCount"":""14400000"",""currentPageIndex"":0,""moreResultsUrl"":""http://www.google.com/search?oe\u003dutf8\u0026ie\u003dutf8\u0026source\u003duds\u0026start\u003d0\u0026hl\u003den-GB\u0026q\u003dcheese""}}, ""responseDetails"": null, ""responseStatus"": 200}";
+			//g1 = JsonManager.Deserialise<GoogleSearchResults>(json);
+			//Response.Write(g1.content);
+
+			wcGameCollection games = new wcGameCollection();
+			string json = "";
+			games = JsonManager.Deserialise<wcGameCollection>(json);
+			Response.Write("oki doki");
+
+		}
+	}
+}

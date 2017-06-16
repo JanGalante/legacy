@@ -1,0 +1,119 @@
+﻿///<reference path="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />
+///<reference path="../jquery.js" />
+/// <reference path="../knockout.js" />
+
+$(document).ready(function(){
+    
+    //var homeTeam = $("");
+    
+    
+//    $("div.game .result-hometeam").each(function (){
+//		//alert($(this).text());
+//		$("div.game .editable").editable("http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=2&awaygoal=0", { 
+//			method : "PUT",
+//			id   : 'homeGoal',
+//			name : 'newvalue'
+//		});
+//    });
+    
+//    $("div.game .editable").editable("http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=2&awaygoal=0", { 
+//		method : "PUT",
+//		id   : 'homeGoal',
+//        name : 'newvalue'
+//	});
+
+
+//$("div.game .editable").editable("http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=2&awaygoal=0", { 
+//		method  : "PUT"
+//	});
+
+ $("div.game .editable").editable("http://localhost/Wc2010.ashx?action=saveResult&group=A&hometeam=Sydafrika&awayteam=Mexiko&homegoal=2&awaygoal=0", { 
+		method		: "PUT",
+		id			: "gameid",
+		name		: "result"
+		,callback : function(value, settings) {
+//         console.log(this);
+//         console.log(value);
+//         console.log(settings);
+			alert("dsfsdf");
+			$.getJSON('http://localhost/Wc2010.ashx?action=getGroup&group=a', function(data){
+				var response
+				
+//				$.each(data, function(key, val) {
+//					items.push('<li id="' + key + '">' + val + '</li>');
+//				});
+				
+//				$.each(data, function(key, val) {
+//					response += ('<td>' + data.team + '</td>');
+//				});
+				
+				for(i=0;i<data.length;i++){
+					response += ('<td>' + data[i].team + '</td>');
+				}
+
+				
+				$("#Grupp-A").html(response);
+			});
+         }
+	});
+});
+
+
+
+/////////////////////////
+//function Team(name, gamesplayed, gameswon, gamesdraw, gameslost, goalsmade, goalsbackward, goaldifference, points) {
+////    var self = this;
+////    self.name = ko.observable(data.name);
+////    self.gamesplayed = ko.observable(data.gamesplayed);
+////    self.gameswon = ko.observable(data.gameswon);
+////    self.gamesdraw = ko.observable(data.gamesdraw);
+////    self.gameslost = ko.observable(data.gameslost);
+////    self.goalsmade = ko.observable(data.goalsmade);
+////    self.goalsbackward = ko.observable(data.goalsbackward);
+////    self.goaldifference = ko.observable(data.goaldifference);
+////    self.points = ko.observable(data.points);
+//	var self = this;
+//    self.name = name;
+//    self.gamesplayed = gamesplayed;
+//    self.gameswon = gameswon;
+//    self.gamesdraw = gamesdraw;
+//    self.gameslost = gameslost;
+//    self.goalsmade = goalsmade;
+//    self.goalsbackward = goalsbackward;
+//    self.goaldifference = goaldifference;
+//    self.points = points;
+//}
+
+//// This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
+//function TeamListViewModel() {
+//    var self = this;
+////    self.teams = ko.observableArray([]);
+//    
+//     // Load initial state from server, convert it to Task instances, then populate self.tasks
+////    $.getJSON("/Wc2010.ashx?action=getGroup&group=a", function(allData) {
+////        var mappedTeams = $.map(allData, function(item) { return new Team(item) });
+////        self.teams(mappedTeams);
+////    });
+//	
+//	
+//	// Editable data
+//    self.teams = ko.observableArray([
+//        new Team("Sweden", 3, 1, 1, 1, 10, 10, 0, 4),
+//        new Team("Denamark", 3, 1, 1, 1, 10, 10, 0, 4)
+//    ]);  
+//    
+////    this.name = "Sweden";
+////    this.points = "9";
+//}
+
+//// Activates knockout.js
+//ko.applyBindings(new TeamListViewModel());
+
+// This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
+function AppViewModel() {
+    this.firstName = ko.observable("Bert");
+    this.lastName = ko.observable("Bertington");
+}
+
+// Activates knockout.js
+ko.applyBindings(new AppViewModel());

@@ -1,0 +1,482 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeBehind="wc2010.aspx.cs" Inherits="janlundholm.eu.wc2010" Title="Untitled Page" %>
+<%--<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="Header" runat="server">
+</asp:Content>--%>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="Content" runat="server">
+    <h2>VM 2010</h2>
+    
+	<p>&nbsp;</p>   
+    
+   <%-- <%--http://sv.wikipedia.org/wiki/National_Hockey_League_2010/2011--%>
+    <%--http://sv.wikipedia.org/wiki/V%C3%A4rldsm%C3%A4sterskapet_i_fotboll_2010--%>
+    <div id="wrapper" class="finals">
+    
+    <asp:Label ID="lblExcelValue" runat="server"></asp:Label>
+    
+		<%--Åttondelsfinaler--%>
+		<asp:Repeater ID="rpEightFinals" runat="server">
+			<HeaderTemplate>
+				<div class="eightfinals">
+			</HeaderTemplate>
+				
+			<ItemTemplate>
+				<div class="team">
+					<div class="leftspace">&nbsp;</div>
+					<div class="pairing">19</div>
+					<div class="name"><%# ((BusinessLayer.wcGame)Container.DataItem).HomeTeam.Name %></div>
+					<div class="result <%# Container.ItemIndex % 2 == 0 ? null : " rightline" %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultHomeTeam %></div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<div class="team">
+					<div class="leftspace topline">&nbsp;</div>
+					<div class="pairing topline">23</div>
+					<div class="name topline"><%# ((BusinessLayer.wcGame)Container.DataItem).AwayTeam.Name %></div>
+					<div class="result topline <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultAwayTeam %>
+					</div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<asp:PlaceHolder ID="phGap" runat="server" Visible="<%# ((BusinessLayer.wcGameCollection)rpEightFinals.DataSource).Count - 1 == Container.ItemIndex ? false : true %>">
+					<div class="gap <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><!-- --></div>
+				</asp:PlaceHolder>
+			</ItemTemplate>
+				
+			<FooterTemplate>
+				</div>
+			</FooterTemplate>
+		</asp:Repeater>
+		
+		<%--Kvartsfinaler--%>
+		<asp:Repeater ID="rpQuarterfinals" runat="server">
+			<HeaderTemplate>
+				<div class="quarterfinals">
+			</HeaderTemplate>
+				
+			<ItemTemplate>
+				<div class="team">
+					<div class="leftspace">&nbsp;</div>
+					<div class="pairing">19</div>
+					<div class="name"><%# ((BusinessLayer.wcGame)Container.DataItem).HomeTeam.Name %></div>
+					<div class="result <%# Container.ItemIndex % 2 == 0 ? null : " rightline" %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultHomeTeam %></div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<div class="team">
+					<div class="leftspace topline">&nbsp;</div>
+					<div class="pairing topline">23</div>
+					<div class="name topline"><%# ((BusinessLayer.wcGame)Container.DataItem).AwayTeam.Name %></div>
+					<div class="result topline <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultAwayTeam %>
+					</div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<asp:PlaceHolder ID="phGap" runat="server" Visible="<%# ((BusinessLayer.wcGameCollection)rpQuarterfinals.DataSource).Count - 1 == Container.ItemIndex ? false : true %>">
+					<div class="gap <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><!-- --></div>
+				</asp:PlaceHolder>
+			</ItemTemplate>
+				
+			<FooterTemplate>
+				</div>
+			</FooterTemplate>
+		</asp:Repeater>
+		
+		<%--Semifinaler--%>
+		<asp:Repeater ID="rpSemiFinals" runat="server">
+			<HeaderTemplate>
+				<div class="semifinals">
+			</HeaderTemplate>
+
+			<ItemTemplate>
+				<div class="team">
+					<div class="leftspace">&nbsp;</div>
+					<div class="pairing">19</div>
+					<div class="name"><%# ((BusinessLayer.wcGame)Container.DataItem).HomeTeam.Name %></div>
+					<div class="result <%# Container.ItemIndex % 2 == 0 ? null : " rightline" %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultHomeTeam %></div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<div class="team">
+					<div class="leftspace topline">&nbsp;</div>
+					<div class="pairing topline">23</div>
+					<div class="name topline"><%# ((BusinessLayer.wcGame)Container.DataItem).AwayTeam.Name %></div>
+					<div class="result topline <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultAwayTeam %>
+					</div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<asp:PlaceHolder ID="phGap" runat="server" Visible="<%# ((BusinessLayer.wcGameCollection)rpSemiFinals.DataSource).Count - 1 == Container.ItemIndex ? false : true %>">
+					<div class="gap <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><!-- --></div>
+				</asp:PlaceHolder>
+			</ItemTemplate>
+				
+			<FooterTemplate>
+				</div>
+			</FooterTemplate>
+		</asp:Repeater>
+		
+		<%--final--%>
+		<asp:Repeater ID="rpFinal" runat="server">
+			<HeaderTemplate>
+				<div class="final">
+			</HeaderTemplate>
+				
+			<ItemTemplate>
+				<div class="team">
+					<div class="leftspace">&nbsp;</div>
+					<div class="pairing">19</div>
+					<div class="name"><%# ((BusinessLayer.wcGame)Container.DataItem).HomeTeam.Name %></div>
+					<div class="result <%# Container.ItemIndex % 2 == 0 ? null : " rightline" %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultHomeTeam %></div>
+					<div class="clear"><!-- --></div>
+				</div>
+				<div class="team">
+					<div class="leftspace topline">&nbsp;</div>
+					<div class="pairing topline">23</div>
+					<div class="name topline"><%# ((BusinessLayer.wcGame)Container.DataItem).AwayTeam.Name %></div>
+					<div class="result topline <%# Container.ItemIndex % 2 == 0 ? " rightline" : null %>"><%# ((BusinessLayer.wcGame)Container.DataItem).FinalResult.ResultAwayTeam %>
+					</div>
+					<div class="clear"><!-- --></div>
+				</div>
+			</ItemTemplate>
+				
+			<FooterTemplate>
+				</div>
+			</FooterTemplate>
+		</asp:Repeater>
+		
+		
+		<div style="clear:both"><!-- --></div>
+	    
+	    
+		<br />
+		<hr />
+    
+        <div class="eightfinals">
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+        </div>
+        
+        <div class="quarterfinals">
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+        </div>
+        
+        <div class="semifinals">
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+            <div class="gap"><!-- --></div>
+            
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result rightline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+        </div>
+        
+            
+        <div class="final">
+            <div class="team">
+                <div class="leftspace">&nbsp;</div>
+                <div class="pairing">19</div>
+                <div class="name">Argentina</div>
+                <div class="result">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            <div class="team">
+                <div class="leftspace topline">&nbsp;</div>
+                <div class="pairing topline">23</div>
+                <div class="name topline">Brasilien</div>
+                <div class="result topline">2</div>
+                <div class="clear"><!-- --></div>
+            </div>
+            
+           
+        </div>
+        <div style="clear:both"><!-- --></div>
+    </div>
+        
+        
+    
+    
+    
+    <br />
+    <hr />
+   
+    
+    <%--Repeater för alla grupper--%>
+    <asp:Repeater ID="rptTournament" runat="server">
+         <ItemTemplate>
+            <%--Här kommer det ligga en liga<br />--%>
+            <asp:Repeater ID="rptTournamentResults" runat="server" DataSource="<%#(BusinessLayer.wcGameCollection)Container.DataItem %>">
+                <ItemTemplate>
+                    <%--<%# Eval("Date") %>--%>
+                    <%# ((BusinessLayer.wcGame)Container.DataItem).Date.ToString("yyyy-MM-dd") %>
+                    <%# this.GetHomeTeamName(Container.DataItem) %> - <%# this.GetAwayTeamName(Container.DataItem) %>
+                    <%# this.GetResult(Container.DataItem)%>
+                    <%# Eval("Channel") %>
+                    <br />
+                </ItemTemplate>    
+            </asp:Repeater>            
+
+            Här kommer en tabell att ligga<br />
+            <asp:Repeater ID="Repeater1" runat="server" DataSource="<%#((BusinessLayer.wcGameCollection)Container.DataItem).Teams %>">
+                <HeaderTemplate>
+                    <table>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>P</td>
+                            <td>W</td>
+                            <td>D</td>
+                            <td>L</td>
+                            <td>F</td>
+                            <td>A</td>
+                            <td>+-</td>
+                            <td>P</td>
+                        </tr>
+                </HeaderTemplate>
+                <ItemTemplate>
+                        <tr>
+                            <td><%# Eval("Name") %></td>
+                            <td><%# Eval("GamesPlayed") %></td>
+                            <td><%# Eval("GamesWon")%></td>
+                            <td><%# Eval("GamesDraw")%></td>
+                            <td><%# Eval("GamesLost")%></td>
+                            <td><%# Eval("GoalsMade")%></td>
+                            <td><%# Eval("GoalsBackward")%></td>
+                            <td><%# ((BusinessLayer.wcTeam)Container.DataItem).GoalsMade - ((BusinessLayer.wcTeam)Container.DataItem).GoalsBackward%></td>
+                            <td><%# Eval("Points") %></td>
+                        </tr>
+                </ItemTemplate>
+                <FooterTemplate>
+                    </table>
+                    <br />
+                    <hr />
+                    <br />
+                </FooterTemplate>
+            </asp:Repeater>
+            
+        </ItemTemplate>            
+    </asp:Repeater>
+    
+
+    
+</asp:Content>
+<%--
+<asp:Content ID="Content4" ContentPlaceHolderID="Footer" runat="server">
+</asp:Content>--%>

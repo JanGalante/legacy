@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace BusinessLayer
+{
+    public class wcResultHalfTime : wcResult
+    {
+        public wcResultHalfTime(string result) : base(result)
+        {
+            //throw new System.NotImplementedException();
+        }
+    }
+}

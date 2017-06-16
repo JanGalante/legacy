@@ -1,0 +1,5 @@
+﻿$(document).ready(function(){
+    $('table').visualize();
+    //$('table').visualize({ type: 'line', width: '420px' });
+});
+
